@@ -3,16 +3,16 @@ from setuptools import setup
 setup(
     name='firix',
     version='0.1.0',
-    description='An API to firi.no crypto exchange',
+    description='An python interface to the firi.no crypto exchange',
     url='https://github.com/kimothy/firix',
     author='Kim Timothy Engh',
     author_email='services.kte@protonmail.com',
     license='GPLv3',
     packages=['firix'],
-    install_requires=['requests'],
+    install_requires=['requests', 'keyring'],
 
     classifiers=[
-        'Development Status :: 1 - Planning',
+        'Development Status :: 2 - Testing',
         'Intended Audience :: Finance/Crypto/Trading',
         'License :: OSI Approved :: GPLv3',
         'Operating System :: POSIX :: Linux',
