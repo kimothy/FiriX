@@ -1,0 +1,92 @@
+#+TITLE: FiriX
+#+AUTHOR: Kim Timothy Engh
+
+* FiriX
+A python package for api requests to the crypto exchange [[https://firi.com/no][firi.com]]
+
+The package makes it easy to buy and sell crypto as well as collect
+market data. The authentication is hardened using HMAC and the
+CLIENT_ID and SECRET_KEY that is provided my the exchange, since this
+is most secure. Read about the api at [[https://developers.firi.com/v2]].
+
+* Usage
+The only class that is required is the FiriX class. All public methods
+are implemented as class methods, so no instance needs to be created.
+
+#+begin_src python
+from firix import FiriX
+response = FiriX.history.market("BTCNOK")
+resonse.json()
+#+end_src
+
+This will return a requests object that contains status, json package
+and so on. See documentation on the Request object at
+[[https://requests.readthedocs.io/en/latest/][requests.readthedocs.io]].
+
+The public methods are grouped in two sub classes, ~FiriX.history~, and
+~FiriX.market~.
+
+To use the private methods, an instance of the class needs to be
+created. For this the CLIENT_ID and PRIVATE_KEY is required. During
+initialization four more attributes are made available, ~order~, ~deposit~,
+~balance~ and ~coin~.
+
+#+begin_src python
+from firix import FiriX
+CLIENT_ID = 'YOUR_CLIENT_ID_FROM_FIRI'
+SECRET_KEY = 'DONT_KEEP_SECRET_KEYS_IN_SRC_CODE'
+
+fx = FiriX(CLIENT_ID, SECRET_KEY)
+response = fx.coin.users_address('BTC')
+response.json()
+#+end_src
+
+In general this package follows the API documentation closely, however
+to simplify similar endpoints, some have been consolidated to one
+function.
+
+* Classes
+** FiriX
+This class is a convenience class that which simplifies initialization,
+and provides access to all the endpoints. Each of the attributes
+~FiriX.history, ~FiriX.market~, ~FiriX.order~, ~FiriX.deposit~, ~FiriX.balance~
+and ~FiriX.coin~ is a reference to the classes ~FXHistory, ~FXMarket~,
+~FXOrder~, ~FXDeposit~, ~FXBalance~ and ~FXCoin~.
+
+** FXRequest
+This class is a wrapper around a ~requests~ client and provides access
+to the epoch method for server time, as well as it's responsible for
+the signatures part of the HMAC security. Normally there is no need to
+manually create an instance of this class, since it is done by the
+~FiriX~ class. It could be useful to manually run post and get function
+with security implemented. See [[https://requests.readthedocs.io/en/latest/][requests docs]] for more details.
+
+** FXHistory
+Provides access to the [[https://developers.firi.com/v2/#tag/History/operation/getTransactions][history]] api through the class methods
+~FXHistory.transactions~ and ~FXHistory.market~.
+
+** FXMarket
+FXMarked wraps the [[https://developers.firi.com/v2/#tag/Market][market]] api with the class methods ~FXMarket.ticker~,
+~FXMarket.availible_tickers~, ~FXMarket.availible_markets~,
+~FXMarket.market_info~, ~FXMarket.order_books~, ~FXMarket.history~.
+
+** FXOrder
+FXOrder makes it possible to create and cancel orders with the instance
+methods ~FXOrder.create~, ~FXOrder.delete~, ~FXOrder.get~ and
+~FXOrder.get_by_id~.
+
+** FXDeposit
+FXDeposit provides instance methods to check history and wallet
+addresses.  These are named ~FXDeposit.history~ and ~FXDeposit.address~.
+
+** FXBalance
+FXBalance provides an instance method to get wallet balances,
+~FXBalance.wallets~
+
+** FXCoin
+FXCoin gives access to the class instance methods
+~FXCoin.pending_withdraw~ and ~FXCoin.user_address~.
+
+* License
+This software is licensed with GPLv3. See complete license
+at [[http://www.gnu.org/licenses/gpl-3.0.txt][gnu.org]].
