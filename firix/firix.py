@@ -140,7 +140,7 @@ class FXDeposit:
         self.fxr = fxr
 
     def history(self, count: int, before: int):
-        paramams = {'count': count, 'before': before}
+        params = {'count': count, 'before': before}
         
         response = self.fxr.get('/v2/deposit/history', params=params)
         return response
