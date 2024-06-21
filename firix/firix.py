@@ -271,11 +271,21 @@ class FiriX(FXRequests):
     history = FXHistory
     market = FXMarket
     
-    def __init__(self, client_id, secret_key):
+    def __init__(self, client_id, secret_key, http_debug=False):
         super().__init__(client_id, secret_key)
 
         self.order = FXOrder(self)
         self.deposit = FXDeposit(self)
         self.balance = FXBalance(self)
         self.coin = FXCoin(self)
+
+        if http_debug:
+            import logging
+            
+            http.client.HTTPConnection.debuglevel = 1
+            logging.basicConfig()
+            logging.getLogger().setLevel(logging.DEBUG)
+            requests_log = logging.getLogger("requests.packages.urllib3")
+            requests_log.setLevel(logging.DEBUG)
+            requests_log.propagate = True
 
